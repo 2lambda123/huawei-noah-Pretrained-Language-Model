@@ -229,6 +229,17 @@ class TextDataset(Data.Dataset):
         return tokens_to_id, ngram, y
 
     def initial(self):
+        """        Open the file and read the specified number of lines, preprocess the data, and store the samples.
+
+        Opens the file specified by file_path and reads the specified number of lines. For each line, preprocess_data
+        is created using the process_oneline method and added to the samples list. If shuffle is True, the samples are
+        shuffled. The current_sample_num and index are updated accordingly.
+
+
+        Raises:
+            IOError: If the file specified by file_path cannot be opened or read.
+        """
+
         self.finput = open(self.file_path, 'r', encoding="utf-8")
         self.samples = list()
 
