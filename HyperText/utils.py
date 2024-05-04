@@ -24,9 +24,9 @@
 import os
 import torch
 import time
-import random
 from datetime import timedelta
 import torch.utils.data as Data
+import secrets
 
 MAX_VOCAB_SIZE = 5000000
 UNK, PAD = '<UNK>', '<PAD>'
@@ -229,6 +229,17 @@ class TextDataset(Data.Dataset):
         return tokens_to_id, ngram, y
 
     def initial(self):
+        """        Open the file and read the specified number of lines, preprocess the data, and store the samples.
+
+        Opens the file specified by file_path and reads the specified number of lines. For each line, preprocess_data
+        is created using the process_oneline method and added to the samples list. If shuffle is True, the samples are
+        shuffled. The current_sample_num and index are updated accordingly.
+
+
+        Raises:
+            IOError: If the file specified by file_path cannot be opened or read.
+        """
+
         self.finput = open(self.file_path, 'r', encoding="utf-8")
         self.samples = list()
 
@@ -243,7 +254,7 @@ class TextDataset(Data.Dataset):
         self.current_sample_num = len(self.samples)
         self.index = list(range(self.current_sample_num))
         if self.shuffle:
-            random.shuffle(self.samples)
+            secrets.SystemRandom().shuffle(self.samples)
 
     def __len__(self):
         return self.file_raws
@@ -266,7 +277,7 @@ class TextDataset(Data.Dataset):
             self.current_sample_num = len(self.samples)
             self.index = list(range(self.current_sample_num))
             if self.shuffle:
-                random.shuffle(self.samples)
+                secrets.SystemRandom().shuffle(self.samples)
 
         return one_sample
 

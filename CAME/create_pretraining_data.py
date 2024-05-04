@@ -19,7 +19,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import argparse
 import logging
 import os
-import random
 from io import open
 import h5py
 import numpy as np
@@ -27,9 +26,8 @@ from tqdm import tqdm, trange
 
 from tokenization import BertTokenizer
 import tokenization as tokenization
-
-import random
 import collections
+import secrets
 
 
 
@@ -146,7 +144,23 @@ def write_instance_to_example_file(instances, tokenizer, max_seq_length,
 def create_training_instances(input_files, tokenizer, max_seq_length,
                               dupe_factor, short_seq_prob, masked_lm_prob,
                               max_predictions_per_seq, rng):
-  """Create `TrainingInstance`s from raw text."""
+  """  Create `TrainingInstance`s from raw text.
+
+  This function takes raw text input files and tokenizes them to create `TrainingInstance`s for further processing.
+
+  Args:
+      input_files (list): A list of input file paths containing raw text data.
+      tokenizer (object): An instance of the tokenizer class used for tokenization.
+      max_seq_length (int): The maximum sequence length for tokenized instances.
+      dupe_factor (int): The duplication factor for creating training instances.
+      short_seq_prob (float): The probability of creating a short sequence instance.
+      masked_lm_prob (float): The probability of masking tokens in the input.
+      max_predictions_per_seq (int): The maximum number of masked tokens per sequence.
+      rng (object): An instance of the random number generator class.
+
+  Returns:
+      list: A list of `TrainingInstance`s created from the input raw text.
+  """
   all_documents = [[]]
 
   # Input file format:
@@ -459,7 +473,7 @@ def main():
     else:
       raise ValueError("{} is not a valid path".format(args.input_file))
 
-    rng = random.Random(args.random_seed)
+    rng = secrets.SystemRandom().Random(args.random_seed)
     instances = create_training_instances(
         input_files, tokenizer, args.max_seq_length, args.dupe_factor,
         args.short_seq_prob, args.masked_lm_prob, args.max_predictions_per_seq,

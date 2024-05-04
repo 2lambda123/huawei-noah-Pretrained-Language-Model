@@ -226,7 +226,14 @@ def printable_text_byte(text):
 
 
 def load_vocab(vocab_file):
-  """Loads a vocabulary file into a dictionary."""
+  """  Loads a vocabulary file into a dictionary.
+
+  Args:
+      vocab_file (str): The file path of the vocabulary file.
+
+  Returns:
+      collections.OrderedDict: A dictionary containing the loaded vocabulary.
+  """
   vocab = collections.OrderedDict()
   index = 0
   with open(vocab_file, "r") as reader:
@@ -514,7 +521,17 @@ def getPunc(context):
     return context
 
 def _is_punctuation(char):
-  """Checks whether `chars` is a punctuation character."""
+  """  Checks whether `char` is a punctuation character.
+
+  It first checks if the character is within the ASCII range of punctuation characters.
+  If not, it then checks the Unicode category of the character to determine if it is a punctuation character.
+
+  Args:
+      char (str): The character to be checked.
+
+  Returns:
+      bool: True if the input character is a punctuation character, False otherwise.
+  """
  # if len(getPunc(char)) == 0: return False
  # return True
   cp = ord(char)

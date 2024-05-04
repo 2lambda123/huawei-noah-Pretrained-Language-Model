@@ -26,7 +26,14 @@ logger = logging.getLogger(__name__)
 VOCAB_NAME='vocab.txt'
 
 def load_vocab(vocab_file):
-    """Loads a vocabulary file into a dictionary."""
+    """    Loads a vocabulary file into a dictionary.
+
+    Args:
+        vocab_file (str): The file path of the vocabulary file.
+
+    Returns:
+        collections.OrderedDict: A dictionary containing the loaded vocabulary.
+    """
     vocab = collections.OrderedDict()
     index = 0
     with open(vocab_file, "r", encoding="utf-8") as reader:
