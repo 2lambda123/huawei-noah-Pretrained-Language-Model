@@ -41,7 +41,14 @@ VOCAB_NAME = 'vocab.txt'
 
 
 def load_vocab(vocab_file):
-    """Loads a vocabulary file into a dictionary."""
+    """    Loads a vocabulary file into a dictionary.
+
+    Args:
+        vocab_file (str): The file path of the vocabulary file.
+
+    Returns:
+        collections.OrderedDict: A dictionary containing the loaded vocabulary.
+    """
     vocab = collections.OrderedDict()
     index = 0
     with open(vocab_file, "r", encoding="utf-8") as reader:
@@ -373,7 +380,14 @@ def _is_control(char):
 
 
 def _is_punctuation(char):
-    """Checks whether `chars` is a punctuation character."""
+    """    Checks whether `chars` is a punctuation character.
+
+    Args:
+        char (str): The character to be checked.
+
+    Returns:
+        bool: True if the character is a punctuation, False otherwise.
+    """
     cp = ord(char)
     # We treat all non-letter/number ASCII as punctuation.
     # Characters such as "^", "$", and "`" are not in the Unicode
