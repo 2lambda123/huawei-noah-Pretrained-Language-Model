@@ -233,7 +233,7 @@ class TextDataset(Data.Dataset):
         self.samples = list()
 
         for _ in range(self.nraws):
-            line = self.finput.readline()
+            line = self.finput.readline(5_000_000)
             if line:
                 preprocess_data = self.process_oneline(line)
                 self.samples.append(preprocess_data)

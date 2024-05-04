@@ -159,7 +159,7 @@ def create_training_instances(input_files, tokenizer, max_seq_length,
     print("creating instance from {}".format(input_file))
     with open(input_file, "r") as reader:
       while True:
-        line = tokenization.convert_to_unicode(reader.readline())
+        line = tokenization.convert_to_unicode(reader.readline(5_000_000))
         if not line:
           break
         line = line.strip()

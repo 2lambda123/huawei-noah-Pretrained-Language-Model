@@ -171,7 +171,7 @@ def read_examples(input_file):
     unique_id = 0
     with open(input_file, "r", encoding='utf-8') as reader:
         while True:
-            line = reader.readline()
+            line = reader.readline(5_000_000)
             if not line:
                 break
             line = line.strip()
