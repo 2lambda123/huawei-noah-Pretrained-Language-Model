@@ -166,7 +166,16 @@ def _truncate_seq_pair(tokens_a, tokens_b, max_length):
 
 
 def read_examples(input_file):
-    """Read a list of `InputExample`s from an input file."""
+    """    Read a list of `InputExample`s from an input file.
+
+    This function reads the input file and creates a list of `InputExample` objects based on the content of the file.
+
+    Args:
+        input_file (str): The path to the input file.
+
+    Returns:
+        list: A list of `InputExample` objects.
+    """
     examples = []
     unique_id = 0
     with open(input_file, "r", encoding='utf-8') as reader:
