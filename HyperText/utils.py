@@ -24,9 +24,9 @@
 import os
 import torch
 import time
-import random
 from datetime import timedelta
 import torch.utils.data as Data
+import secrets
 
 MAX_VOCAB_SIZE = 5000000
 UNK, PAD = '<UNK>', '<PAD>'
@@ -254,7 +254,7 @@ class TextDataset(Data.Dataset):
         self.current_sample_num = len(self.samples)
         self.index = list(range(self.current_sample_num))
         if self.shuffle:
-            random.shuffle(self.samples)
+            secrets.SystemRandom().shuffle(self.samples)
 
     def __len__(self):
         return self.file_raws
@@ -277,7 +277,7 @@ class TextDataset(Data.Dataset):
             self.current_sample_num = len(self.samples)
             self.index = list(range(self.current_sample_num))
             if self.shuffle:
-                random.shuffle(self.samples)
+                secrets.SystemRandom().shuffle(self.samples)
 
         return one_sample
 
