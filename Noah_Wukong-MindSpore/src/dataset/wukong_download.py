@@ -25,6 +25,7 @@ from io import BytesIO
 import requests
 from PIL import Image
 import pandas as pd
+from security import safe_requests
 
 warnings.filterwarnings("ignore")
 logging.basicConfig(level=logging.INFO)
@@ -66,7 +67,7 @@ def fetch_img_func(q, img_download_root, total_len):
         if os.path.exists(img_save_path):
             continue
         try:
-            res = requests.get(img_url, stream=True, verify=True, timeout=5)
+            res = safe_requests.get(img_url, stream=True, verify=True, timeout=5)
             if res.status_code == 200:
                 buf = BytesIO()
                 buf.write(res.content)
