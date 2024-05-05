@@ -32,6 +32,20 @@ logger = logging.getLogger(__name__)
 
 
 def fetch_img_func(q, img_download_root, total_len):
+    """    Fetch and save images from URLs.
+
+    This function fetches images from the given URLs and saves them to the specified directory. It also logs the download progress and estimated time of arrival.
+
+    Args:
+        q (queue): A queue containing information about the images to be downloaded.
+        img_download_root (str): The root directory where the images will be saved.
+        total_len (int): The total number of images to be downloaded.
+
+
+    Raises:
+        requests.RequestException: If there is an error while making a request to download the image.
+    """
+
     start_time = time.time()
     while True:
         try:
