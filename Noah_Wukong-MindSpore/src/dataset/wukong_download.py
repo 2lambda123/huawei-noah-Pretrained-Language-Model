@@ -52,7 +52,7 @@ def fetch_img_func(q, img_download_root, total_len):
         if os.path.exists(img_save_path):
             continue
         try:
-            res = requests.get(img_url, stream=True, verify=False, timeout=5)
+            res = requests.get(img_url, stream=True, verify=True, timeout=5)
             if res.status_code == 200:
                 buf = BytesIO()
                 buf.write(res.content)
