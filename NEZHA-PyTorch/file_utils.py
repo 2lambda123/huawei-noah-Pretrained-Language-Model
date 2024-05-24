@@ -160,7 +160,7 @@ def s3_get(url, temp_file):
 
 
 def http_get(url, temp_file):
-    req = requests.get(url, stream=True)
+    req = requests.get(url, stream=True, timeout=60)
     content_length = req.headers.get('Content-Length')
     total = int(content_length) if content_length is not None else None
     progress = tqdm(unit="B", total=total)
@@ -188,7 +188,7 @@ def get_from_cache(url, cache_dir=None):
     if url.startswith("s3://"):
         etag = s3_etag(url)
     else:
-        response = requests.head(url, allow_redirects=True)
+        response = requests.head(url, allow_redirects=True, timeout=60)
         if response.status_code != 200:
             raise IOError("HEAD request failed for url {} with status code {}"
                           .format(url, response.status_code))
