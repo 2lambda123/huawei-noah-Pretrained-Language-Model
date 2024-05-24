@@ -150,6 +150,18 @@ def s3_get(url: str, temp_file: IO) -> None:
 
 
 def http_get(url: str, temp_file: IO) -> None:
+    """    Perform an HTTP GET request and save the response content to a file.
+
+    Args:
+        url (str): The URL to send the GET request to.
+        temp_file (IO): A file-like object to write the response content to.
+
+
+    Raises:
+        ConnectionError: If the GET request fails to establish a connection.
+        Timeout: If the GET request times out.
+    """
+
     req = requests.get(url, stream=True, timeout=60)
     content_length = req.headers.get('Content-Length')
     total = int(content_length) if content_length is not None else None
@@ -162,9 +174,19 @@ def http_get(url: str, temp_file: IO) -> None:
 
 
 def get_from_cache(url: str, cache_dir: Union[str, Path] = None) -> str:
-    """
-    Given a URL, look for the corresponding dataset in the local cache.
+    """    Given a URL, look for the corresponding dataset in the local cache.
     If it's not there, download it. Then return the path to the cached file.
+
+    Args:
+        url (str): The URL of the dataset.
+        cache_dir (Union[str, Path]?): The directory where the dataset is cached.
+            Defaults to None.
+
+    Returns:
+        str: The path to the cached file.
+
+    Raises:
+        IOError: If the HEAD request fails for the given URL with a non-200 status code.
     """
     if cache_dir is None:
         cache_dir = PYTORCH_PRETRAINED_BERT_CACHE

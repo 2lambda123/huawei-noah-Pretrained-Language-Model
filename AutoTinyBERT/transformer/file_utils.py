@@ -166,6 +166,17 @@ def s3_get(url, temp_file):
 
 
 def http_get(url, temp_file):
+    """    Perform an HTTP GET request to download content from the given URL and save it to the specified file.
+
+    Args:
+        url (str): The URL from which to download content.
+        temp_file (file): The file object to which the downloaded content will be saved.
+
+
+    Raises:
+        requests.exceptions.RequestException: If an error occurs during the HTTP GET request.
+    """
+
     req = requests.get(url, stream=True, timeout=60)
     content_length = req.headers.get('Content-Length')
     total = int(content_length) if content_length is not None else None
@@ -178,9 +189,18 @@ def http_get(url, temp_file):
 
 
 def get_from_cache(url, cache_dir=None):
-    """
-    Given a URL, look for the corresponding dataset in the local cache.
+    """    Given a URL, look for the corresponding dataset in the local cache.
     If it's not there, download it. Then return the path to the cached file.
+
+    Args:
+        url (str): The URL of the dataset.
+        cache_dir (str?): The directory path of the cache. If not provided, it defaults to PYTORCH_PRETRAINED_BERT_CACHE.
+
+    Returns:
+        str: The path to the cached file.
+
+    Raises:
+        EnvironmentError: If there is an issue with the network connection or download process.
     """
     if cache_dir is None:
         cache_dir = PYTORCH_PRETRAINED_BERT_CACHE

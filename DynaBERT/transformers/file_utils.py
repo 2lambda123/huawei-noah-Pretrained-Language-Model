@@ -235,6 +235,18 @@ def s3_get(url, temp_file, proxies=None):
 
 
 def http_get(url, temp_file, proxies=None):
+    """    Perform an HTTP GET request and save the response to a file.
+
+    Args:
+        url (str): The URL to send the GET request to.
+        temp_file (file): The file object to write the response content to.
+        proxies (dict?): A dictionary of the protocol to the proxy URL. Defaults to None.
+
+
+    Raises:
+        requests.exceptions.RequestException: If an error occurs during the HTTP request.
+    """
+
     req = requests.get(url, stream=True, proxies=proxies, timeout=60)
     content_length = req.headers.get('Content-Length')
     total = int(content_length) if content_length is not None else None
@@ -247,9 +259,20 @@ def http_get(url, temp_file, proxies=None):
 
 
 def get_from_cache(url, cache_dir=None, force_download=False, proxies=None):
-    """
-    Given a URL, look for the corresponding dataset in the local cache.
+    """    Given a URL, look for the corresponding dataset in the local cache.
     If it's not there, download it. Then return the path to the cached file.
+
+    Args:
+        url (str): The URL of the dataset.
+        cache_dir (str?): The directory where the dataset should be cached. If not provided, it defaults to TRANSFORMERS_CACHE.
+        force_download (bool?): Whether to force download the dataset even if it exists in the cache. Defaults to False.
+        proxies (dict?): The proxies to be used for the download request. Defaults to None.
+
+    Returns:
+        str: The path to the cached file.
+
+    Raises:
+        EnvironmentError: If an error occurs while making the request to the URL.
     """
     if cache_dir is None:
         cache_dir = TRANSFORMERS_CACHE
