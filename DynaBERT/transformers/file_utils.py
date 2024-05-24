@@ -235,7 +235,7 @@ def s3_get(url, temp_file, proxies=None):
 
 
 def http_get(url, temp_file, proxies=None):
-    req = requests.get(url, stream=True, proxies=proxies)
+    req = requests.get(url, stream=True, proxies=proxies, timeout=60)
     content_length = req.headers.get('Content-Length')
     total = int(content_length) if content_length is not None else None
     progress = tqdm(unit="B", total=total)
@@ -266,7 +266,7 @@ def get_from_cache(url, cache_dir=None, force_download=False, proxies=None):
         etag = s3_etag(url, proxies=proxies)
     else:
         try:
-            response = requests.head(url, allow_redirects=True, proxies=proxies)
+            response = requests.head(url, allow_redirects=True, proxies=proxies, timeout=60)
             if response.status_code != 200:
                 etag = None
             else:
