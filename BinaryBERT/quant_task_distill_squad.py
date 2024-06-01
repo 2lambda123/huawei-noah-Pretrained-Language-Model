@@ -15,7 +15,6 @@
 from __future__ import absolute_import, division, print_function
 import argparse
 import os
-import random
 import numpy as np
 import torch
 import copy
@@ -32,6 +31,7 @@ from helper import *
 import pickle
 from kd_learner_squad import KDLearner
 from utils_squad import write_predictions,read_squad_examples,InputFeatures,convert_examples_to_features
+import secrets
 
 def main():
     parser = argparse.ArgumentParser()
@@ -158,7 +158,7 @@ def main():
     logging.info("device: {} n_gpu: {}".format(device, n_gpu))
 
     # Prepare seed
-    random.seed(args.seed)
+    secrets.SystemRandom().seed(args.seed)
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
     if n_gpu > 0:

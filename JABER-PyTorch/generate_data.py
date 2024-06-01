@@ -5,8 +5,10 @@
 # Copyright 2021 Huawei Technologies Co., Ltd.
 
 import sys, re, json, argparse, math
+import secrets
+
 sys.path.insert(0,'..')
-import warnings, locale, random, shutil, os, pickle, copy
+import warnings, locale, shutil, os, pickle, copy
 from collections import defaultdict, Counter
 
 import pandas as pd
@@ -516,8 +518,8 @@ def load_WikiLingua(raw_dataset_dir, seed=42):
                 continue
             exp_lst.append({"idx": "%s_%s" % (i, j), "s_lst": [doc["document"]], "lbl": doc["summary"]})
 
-    random.seed(seed)
-    random.shuffle(exp_lst)
+    secrets.SystemRandom().seed(seed)
+    secrets.SystemRandom().shuffle(exp_lst)
     instance_dict = defaultdict(list)
     idx_train = int(len(exp_lst) * .8)
     instance_dict["train"] = exp_lst[:idx_train]
@@ -1549,7 +1551,7 @@ class DataProcessor(object):
 
         pred_str = self._ids_to_text(decoder_output_ids)
         name = get_close_matches(pred_str, self.t5_name2id.keys())
-        if not name: return random.choice(list(self.t5_id2label.keys()))
+        if not name: return secrets.choice(list(self.t5_id2label.keys()))
         return self.t5_name2id[name[0]]
 
     def _t5_decode_mlc(self, decoder_output_ids):
@@ -1743,7 +1745,7 @@ class DataProcessor(object):
         self.y_pred, self.y_logits, self.eval_counter = defaultdict(list), defaultdict(list), defaultdict(tuple)
 
     def compute_score_ner(self, portion):
-        rint = random.randint(0, 100)
+        rint = secrets.SystemRandom().randint(0, 100)
         output_file = "/tmp/ner.output.%s" % rint
         score_file = "/tmp/ner.score.%s" % rint
         fout = open(output_file, 'w')

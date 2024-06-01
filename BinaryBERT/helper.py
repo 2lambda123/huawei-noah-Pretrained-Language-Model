@@ -15,11 +15,11 @@
 import logging
 import os
 import string
-import random
 import torch
+import secrets
 
 def generate_job_id():
-  return ''.join(random.sample(string.ascii_letters+string.digits, 5))
+  return ''.join(secrets.SystemRandom().sample(string.ascii_letters+string.digits, 5))
 
 def init_logging(log_path):
 

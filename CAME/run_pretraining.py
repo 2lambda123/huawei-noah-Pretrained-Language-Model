@@ -25,7 +25,6 @@ import csv
 import os
 import time
 import argparse
-import random
 import h5py
 from tqdm import tqdm, trange
 from copy import deepcopy
@@ -58,6 +57,7 @@ from SM3 import SM3
 
 import dllogger
 from concurrent.futures import ProcessPoolExecutor
+import secrets
 
 torch._C._jit_set_profiling_mode(False)
 torch._C._jit_set_profiling_executor(False)
@@ -90,7 +90,7 @@ class WorkerInitObj(object):
         self.seed = seed
     def __call__(self, id):
         np.random.seed(seed=self.seed + id)
-        random.seed(self.seed + id)
+        secrets.SystemRandom().seed(self.seed + id)
 
 def create_pretraining_dataset(input_file, max_pred_length, shared_list, args, worker_init):
     train_data = pretraining_dataset(input_file=input_file, max_pred_length=max_pred_length)
@@ -571,7 +571,7 @@ def main():
 
     args = parse_arguments()
         
-    random.seed(args.seed + args.local_rank)
+    secrets.SystemRandom().seed(args.seed + args.local_rank)
     np.random.seed(args.seed + args.local_rank)
     torch.manual_seed(args.seed + args.local_rank)
     torch.cuda.manual_seed(args.seed + args.local_rank)
@@ -610,7 +610,7 @@ def main():
                          os.path.isfile(os.path.join(args.input_dir, f))]
                 files.sort()
                 num_files = len(files)
-                random.Random(args.seed + epoch).shuffle(files)
+                secrets.SystemRandom().Random(args.seed + epoch).shuffle(files)
                 f_start_id = 0
             else:
                 f_start_id = checkpoint['files'][0]

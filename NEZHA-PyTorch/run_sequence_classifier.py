@@ -25,7 +25,6 @@ import argparse
 import csv
 import logging
 import os
-import random
 import sys
 import time
 import datetime
@@ -41,6 +40,7 @@ from file_utils import PYTORCH_PRETRAINED_BERT_CACHE
 from modeling_nezha import BertForSequenceClassification, BertConfig, WEIGHTS_NAME, \
     CONFIG_NAME
 from optimization import BertAdam, warmup_linear
+import secrets
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(name)s -   %(message)s',
                     datefmt='%m/%d/%Y %H:%M:%S',
@@ -667,7 +667,7 @@ def main():
 
     args.train_batch_size = args.train_batch_size // args.gradient_accumulation_steps
 
-    random.seed(args.seed)
+    secrets.SystemRandom().seed(args.seed)
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
     if n_gpu > 0:

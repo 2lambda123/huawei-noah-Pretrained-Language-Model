@@ -24,7 +24,6 @@ import argparse
 import csv
 import logging
 import os
-import random
 import sys
 
 import numpy as np
@@ -41,6 +40,7 @@ from transformer.modeling import TinyBertForSequenceClassification
 from transformer.tokenization import BertTokenizer
 from transformer.optimization import BertAdam
 from transformer.file_utils import WEIGHTS_NAME, CONFIG_NAME
+import secrets
 
 csv.field_size_limit(sys.maxsize)
 
@@ -796,7 +796,7 @@ def main():
     logger.info("device: {} n_gpu: {}".format(device, n_gpu))
 
     # Prepare seed
-    random.seed(args.seed)
+    secrets.SystemRandom().seed(args.seed)
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
     if n_gpu > 0:

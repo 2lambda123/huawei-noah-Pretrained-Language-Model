@@ -14,13 +14,13 @@
 # limitations under the License.
 
 import json
-import random
 import argparse
 
 
 from latency_predictor import LatencyPredictor
 from collections import OrderedDict
 from operator import itemgetter
+import secrets
 
 
 def is_efficient_arch(config):
@@ -102,10 +102,10 @@ class Evolver(object):
         cur_popularity = 0
 
         while cur_popularity < popularity:
-            if random.random() < explore_rate:
-                new_arch = random.choice(candidates)
+            if secrets.SystemRandom().random() < explore_rate:
+                new_arch = secrets.choice(candidates)
                 while str(new_arch) in self.all_arches:
-                    new_arch = random.choice(candidates)
+                    new_arch = secrets.choice(candidates)
 
                 if str(new_arch) not in arch_str_lis:
                     arch_str_lis.append(str(new_arch))
@@ -165,8 +165,8 @@ class Evolver(object):
                 new_arch) in self.all_arches:
             ### layer number
             new_layer_idx = layer_num_idx
-            if prob_m > random.random():
-                layer_offset = random.choice([-1, 0, 1])
+            if prob_m > secrets.SystemRandom().random():
+                layer_offset = secrets.choice([-1, 0, 1])
                 if 0 <= layer_num_idx + layer_offset < max_layer_index:
                     new_layer_idx = layer_num_idx + layer_offset
 
@@ -174,15 +174,15 @@ class Evolver(object):
             new_layer_num = layer_numbers[new_layer_idx]
 
             new_size_idx = hidden_size_idx
-            if prob_m * 2 > random.random():
-                size_offset = random.choice([-1, 0, 1])
+            if prob_m * 2 > secrets.SystemRandom().random():
+                size_offset = secrets.choice([-1, 0, 1])
                 if 0 <= hidden_size_idx + size_offset < max_hid_index:
                     new_size_idx = hidden_size_idx + size_offset
 
             ffn_size_idx = ffn_size_idxes[0]
             new_ffn_size_idx = ffn_size_idx
-            if prob_m * 2 > random.random():
-                ffn_offset = random.choice([-2, -1, 0, 1, 2])
+            if prob_m * 2 > secrets.SystemRandom().random():
+                ffn_offset = secrets.choice([-2, -1, 0, 1, 2])
                 if 0 <= ffn_size_idx + ffn_offset < max_ffn_index:
                     new_ffn_size_idx = ffn_size_idx + ffn_offset
 
@@ -192,16 +192,16 @@ class Evolver(object):
             if model == 'MLM':
                 num_attention_head = head_numbers[0]
                 new_num_attention_head = num_attention_head
-                if prob_m > random.random():
-                    num_attention_offset = random.choice([-2, -1, 0, 1, 2])
+                if prob_m > secrets.SystemRandom().random():
+                    num_attention_offset = secrets.choice([-2, -1, 0, 1, 2])
                     if 0 < num_attention_head + num_attention_offset <= max_head_index:
                         new_num_attention_head = num_attention_head + num_attention_offset
                 new_arch['sample_num_attention_heads'] = [new_num_attention_head] * new_layer_num
                 new_arch['sample_qkv_sizes'] = [new_num_attention_head * 64] * new_layer_num
             else:
                 new_qkv_idx = qkv_size_idxes[0]
-                if prob_m > random.random():
-                    qkv_offset = random.choice([-2, -1, 0, 1, 2])
+                if prob_m > secrets.SystemRandom().random():
+                    qkv_offset = secrets.choice([-2, -1, 0, 1, 2])
                     if 0 <= qkv_size_idxes[0] + qkv_offset < max_qkv_index:
                         new_qkv_idx = qkv_size_idxes[0] + qkv_offset
 
@@ -224,7 +224,7 @@ class Evolver(object):
         mini = min(perfs)
         new_fit = [perfs[i] - mini for i in range(len(perfs))]
         sum_fit = sum(new_fit)
-        rnd_point = random.uniform(0, sum_fit)
+        rnd_point = secrets.SystemRandom().uniform(0, sum_fit)
         accumulator = 0.0
         for ind, val in enumerate(new_fit):
             accumulator += val
@@ -383,15 +383,13 @@ if __name__ == '__main__':
     print('Size of fast candidates: {}'.format(len(fast_candidates)))
 
     if args.method == 'Random':
-        import random
         with open(args.output_file, 'w') as fout:
-            cand_arches = random.sample(candidates, args.gen_size)
+            cand_arches = secrets.SystemRandom().sample(candidates, args.gen_size)
             for cand in cand_arches:
                 fout.write(str(cand) + '\n')
     elif args.method == 'Fast':
-        import random
         with open(args.output_file, 'w') as fout:
-            cand_arches = random.sample(fast_candidates, args.gen_size)
+            cand_arches = secrets.SystemRandom().sample(fast_candidates, args.gen_size)
             for cand in cand_arches:
                 fout.write(str(cand) + '\n')
     elif args.method == 'Evolved':

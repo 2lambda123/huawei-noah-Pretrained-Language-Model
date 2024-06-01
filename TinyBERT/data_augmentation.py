@@ -13,8 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """TinyBERT data augmentation."""
-
-import random
 import sys
 import os
 import unicodedata
@@ -28,6 +26,7 @@ import torch
 import numpy as np
 
 from transformer import BertTokenizer, BertForMaskedLM
+import secrets
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(name)s -   %(message)s',
                     datefmt='%m/%d/%Y %H:%M:%S',
@@ -224,9 +223,9 @@ class DataAugmentor(object):
         while cnt < self.N:
             new_sent = list(tokens)
             for idx in candidate_words.keys():
-                candidate_word = random.choice(candidate_words[idx])
+                candidate_word = secrets.choice(candidate_words[idx])
 
-                x = random.random()
+                x = secrets.SystemRandom().random()
                 if x < self.p:
                     new_sent[idx] = candidate_word
 

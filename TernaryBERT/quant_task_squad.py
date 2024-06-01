@@ -17,7 +17,6 @@ from __future__ import absolute_import, division, print_function
 import argparse
 import logging
 import os
-import random
 import sys
 import pickle
 import copy
@@ -35,6 +34,7 @@ from transformer import BertAdam
 from transformer import BertConfig
 
 from utils_squad import *
+import secrets
 
 log_format = '%(asctime)s %(message)s'
 logging.basicConfig(stream=sys.stdout, level=logging.INFO,
@@ -173,7 +173,7 @@ def main():
     args.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     args.n_gpu = torch.cuda.device_count()
 
-    random.seed(args.seed)
+    secrets.SystemRandom().seed(args.seed)
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
     if args.n_gpu > 0:

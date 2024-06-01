@@ -23,7 +23,6 @@ import argparse
 import csv
 import logging
 import os
-import random
 import sys
 import json
 
@@ -41,6 +40,7 @@ from transformer.file_utils import WEIGHTS_NAME, CONFIG_NAME
 from transformer.modeling import TinyBertForPreTraining, BertModel
 from transformer.tokenization import BertTokenizer
 from transformer.optimization import BertAdam
+import secrets
 
 csv.field_size_limit(sys.maxsize)
 
@@ -312,7 +312,7 @@ def main():
 
     args.train_batch_size = args.train_batch_size // args.gradient_accumulation_steps
 
-    random.seed(args.seed)
+    secrets.SystemRandom().seed(args.seed)
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
     if n_gpu > 0:

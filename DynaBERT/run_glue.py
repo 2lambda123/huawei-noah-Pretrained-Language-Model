@@ -23,7 +23,6 @@ from __future__ import absolute_import, division, print_function
 import argparse
 import logging
 import os
-import random
 import math
 import numpy as np
 import torch
@@ -42,6 +41,7 @@ from transformers import glue_compute_metrics as compute_metrics
 from transformers import glue_output_modes as output_modes
 from transformers import glue_processors as processors
 from transformers import glue_convert_examples_to_features as convert_examples_to_features
+import secrets
 
 
 logger = logging.getLogger(__name__)
@@ -63,7 +63,7 @@ MODEL_CLASSES = {
 
 
 def set_seed(args):
-    random.seed(args.seed)
+    secrets.SystemRandom().seed(args.seed)
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
     if args.n_gpu > 0:

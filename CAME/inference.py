@@ -23,7 +23,6 @@ import json
 import logging
 import math
 import os
-import random
 import sys
 from io import open
 
@@ -36,6 +35,7 @@ from file_utils import PYTORCH_PRETRAINED_BERT_CACHE
 from modeling import BertForQuestionAnswering, BertConfig, WEIGHTS_NAME, CONFIG_NAME
 from tokenization import (BasicTokenizer, BertTokenizer, whitespace_tokenize)
 from run_squad import _get_best_indices, _compute_softmax, get_valid_prelim_predictions, get_answer_text
+import secrets
 
 if sys.version_info[0] == 2:
     import cPickle as pickle
@@ -275,7 +275,7 @@ def main():
     parser.add_argument("--local_rank", default=-1, help="ordinal of the GPU to use")
     
     args = parser.parse_args()
-    random.seed(args.seed)
+    secrets.SystemRandom().seed(args.seed)
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
     torch.cuda.manual_seed(args.seed)

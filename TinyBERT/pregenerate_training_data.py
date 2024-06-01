@@ -26,9 +26,9 @@ from tempfile import TemporaryDirectory
 from multiprocessing import Pool
 
 import numpy as np
-from random import random, randrange, randint, shuffle, choice
 
 from transformer.tokenization import BertTokenizer
+import secrets
 
 
 # This is used for running on Huawei Cloud.
@@ -85,11 +85,11 @@ class DocumentDatabase:
                 self._precalculate_doc_weights()
             rand_start = self.doc_cumsum[current_idx]
             rand_end = rand_start + self.cumsum_max - self.doc_lengths[current_idx]
-            sentence_index = randrange(rand_start, rand_end) % self.cumsum_max
+            sentence_index = secrets.SystemRandom().randrange(rand_start, rand_end) % self.cumsum_max
             sampled_doc_index = np.searchsorted(self.doc_cumsum, sentence_index, side='right')
         else:
             # If we don't use sentence weighting, then every doc has an equal chance to be chosen
-            sampled_doc_index = (current_idx + randrange(1, len(self.doc_lengths))) % len(self.doc_lengths)
+            sampled_doc_index = (current_idx + secrets.SystemRandom().randrange(1, len(self.doc_lengths))) % len(self.doc_lengths)
         assert sampled_doc_index != current_idx
         if self.reduce_memory:
             return self.document_shelf[str(sampled_doc_index)]
@@ -127,7 +127,7 @@ def truncate_seq_pair(tokens_a, tokens_b, max_num_tokens):
 
         # We want to sometimes truncate from the front and sometimes from the
         # back to add more randomness and avoid biases.
-        if random() < 0.5:
+        if secrets.SystemRandom().random() < 0.5:
             del trunc_tokens[0]
         else:
             trunc_tokens.pop()
@@ -160,7 +160,7 @@ def create_masked_lm_predictions(tokens, masked_lm_prob, max_predictions_per_seq
 
     num_to_mask = min(max_predictions_per_seq,
                       max(1, int(round(len(tokens) * masked_lm_prob))))
-    shuffle(cand_indices)
+    secrets.SystemRandom().shuffle(cand_indices)
     masked_lms = []
     covered_indexes = set()
     for index_set in cand_indices:
@@ -181,15 +181,15 @@ def create_masked_lm_predictions(tokens, masked_lm_prob, max_predictions_per_seq
             covered_indexes.add(index)
 
             # 80% of the time, replace with [MASK]
-            if random() < 0.8:
+            if secrets.SystemRandom().random() < 0.8:
                 masked_token = "[MASK]"
             else:
                 # 10% of the time, keep original
-                if random() < 0.5:
+                if secrets.SystemRandom().random() < 0.5:
                     masked_token = tokens[index]
                 # 10% of the time, replace with random word
                 else:
-                    masked_token = choice(vocab_list)
+                    masked_token = secrets.choice(vocab_list)
             masked_lms.append(MaskedLmInstance(index=index, label=tokens[index]))
             tokens[index] = masked_token
 
@@ -220,8 +220,8 @@ def create_instances_from_document(
     # The `target_seq_length` is just a rough target however, whereas
     # `max_seq_length` is a hard limit.
     target_seq_length = max_num_tokens
-    if random() < short_seq_prob:
-        target_seq_length = randint(2, max_num_tokens)
+    if secrets.SystemRandom().random() < short_seq_prob:
+        target_seq_length = secrets.SystemRandom().randint(2, max_num_tokens)
 
     # We DON'T just concatenate all of the tokens from a document into a long
     # sequence and choose an arbitrary split point because this would make the
@@ -242,7 +242,7 @@ def create_instances_from_document(
                 # (first) sentence.
                 a_end = 1
                 if len(current_chunk) >= 2:
-                    a_end = randrange(1, len(current_chunk))
+                    a_end = secrets.SystemRandom().randrange(1, len(current_chunk))
 
                 tokens_a = []
                 for j in range(a_end):
@@ -251,14 +251,14 @@ def create_instances_from_document(
                 tokens_b = []
 
                 # Random next
-                if bi_text and (len(current_chunk) == 1 or random() < 0.5) :
+                if bi_text and (len(current_chunk) == 1 or secrets.SystemRandom().random() < 0.5) :
                     is_random_next = True
                     target_b_length = target_seq_length - len(tokens_a)
 
                     # Sample a random document, with longer docs being sampled more frequently
                     random_document = doc_database.sample_doc(current_idx=doc_idx, sentence_weighted=True)
 
-                    random_start = randrange(0, len(random_document))
+                    random_start = secrets.SystemRandom().randrange(0, len(random_document))
                     for j in range(random_start, len(random_document)):
                         tokens_b.extend(random_document[j])
                         if len(tokens_b) >= target_b_length:

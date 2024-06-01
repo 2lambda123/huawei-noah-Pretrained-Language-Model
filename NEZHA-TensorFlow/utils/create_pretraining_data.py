@@ -19,9 +19,9 @@ from __future__ import division
 from __future__ import print_function
 
 import collections
-import random
 import tokenization
 import tensorflow as tf
+import secrets
 
 flags = tf.flags
 
@@ -420,7 +420,7 @@ def main(_):
   for input_file in input_files:
     tf.logging.info("  %s", input_file)
 
-  rng = random.Random(FLAGS.random_seed)
+  rng = secrets.SystemRandom().Random(FLAGS.random_seed)
   instances = create_training_instances(
       input_files, tokenizer, FLAGS.max_seq_length, FLAGS.dupe_factor,
       FLAGS.short_seq_prob, FLAGS.masked_lm_prob, FLAGS.max_predictions_per_seq,

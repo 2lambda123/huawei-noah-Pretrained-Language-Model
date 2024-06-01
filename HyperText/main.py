@@ -25,12 +25,12 @@ import time
 import os
 import torch
 import numpy as np
-import random
 from train import train
 from importlib import import_module
 import argparse
 from models.Config import Config
 from utils import build_dataset, get_time_dif, build_dataloader
+import secrets
 
 parser = argparse.ArgumentParser(description='HyperText Text Classification')
 parser.add_argument('--model', type=str, default='HyperText',
@@ -60,7 +60,7 @@ def print_config(config):
         print("%s=%s" % (str(k), str(v)))
 
 if __name__ == '__main__':
-    random.seed(1)
+    secrets.SystemRandom().seed(1)
     np.random.seed(1)
     torch.manual_seed(1)
     torch.cuda.manual_seed_all(1)

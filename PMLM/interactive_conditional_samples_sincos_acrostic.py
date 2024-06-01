@@ -3,8 +3,6 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
-
-import random
 import collections
 import copy
 import json
@@ -15,6 +13,7 @@ import os
 import numpy as np
 import tensorflow as tf
 import tokenization
+import secrets
 
 def top_k_logits(logits, k):
   if k == 0:
@@ -1354,7 +1353,7 @@ class BertModelDemo():
     if order == "r2l":
       input_mpos_list.reverse()
     elif order == "random":
-      random.shuffle(input_mpos_list)
+      secrets.SystemRandom().shuffle(input_mpos_list)
     print ("The order for generation is:")
     print (input_mpos_list)
 
