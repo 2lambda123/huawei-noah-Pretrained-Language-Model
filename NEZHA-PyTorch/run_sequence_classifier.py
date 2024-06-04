@@ -522,6 +522,20 @@ def accuracy(out, labels, topk=1):
 
 
 def main():
+    """    Main function to train, evaluate, and test a BERT-based model for
+    sequence classification.
+
+    This function parses command line arguments using argparse and performs
+    the following tasks: - Training the model using the specified task and
+    input data directory. - Evaluating the model on the dev set. - Testing
+    the model on the test set.
+
+
+    Raises:
+        ValueError: If at least one of `do_train` or `do_eval(test)` is not set to True.
+        ValueError: If the output directory already exists and is not empty.
+    """
+
     parser = argparse.ArgumentParser()
     ## Required parameters
     parser.add_argument("--data_dir",
