@@ -72,8 +72,24 @@ MaskedLmInstance = collections.namedtuple("MaskedLmInstance",
 
 
 def create_masked_lm_predictions(tokens, masked_lm_prob, max_predictions_per_seq, vocab_list):
-    """Creates the predictions for the masked LM objective. This is mostly copied from the Google BERT repo, but
-    with several refactors to clean it up and remove a lot of unnecessary variables."""
+    """    Creates the predictions for the masked LM objective.
+
+    This function creates predictions for the masked LM objective by masking
+    a certain number of tokens in the input sequence and replacing them with
+    either [MASK], the original token, or a random word from the vocabulary
+    list.
+
+    Args:
+        tokens (list): A list of tokens representing the input sequence.
+        masked_lm_prob (float): The probability of masking tokens in the input sequence.
+        max_predictions_per_seq (int): The maximum number of tokens to mask in the input sequence.
+        vocab_list (list): A list of words from which to choose replacements for masked tokens.
+
+    Returns:
+        tuple: A tuple containing: - list: The modified input sequence with masked
+            tokens replaced. - list: The indices of the masked tokens in the
+            original input sequence. - list: The original tokens that were masked.
+    """
 
     num_to_mask = min(max_predictions_per_seq,
                       max(1, int(round(len(tokens) * masked_lm_prob))))
@@ -219,6 +235,20 @@ def load_doc_tokens_ngrams(args):
 
 
 def main():
+    """    Main function for training a superBERT model with various
+    configurations.
+
+    This function parses command line arguments using ArgumentParser and
+    initializes the training process. It sets up the distributed training
+    environment, initializes the model and optimizer, and runs the training
+    loop for the specified number of epochs.
+
+
+    Raises:
+        ValueError: If an invalid value is provided for the gradient_accumulation_steps
+            parameter.
+    """
+
     parser = ArgumentParser()
     parser.add_argument('--pregenerated_data', type=str, required=True, default='/nas/hebin/data/english-exp/books_wiki_tokens_ngrams')
     parser.add_argument('--s3_output_dir', type=str, default='huawei_yun')
