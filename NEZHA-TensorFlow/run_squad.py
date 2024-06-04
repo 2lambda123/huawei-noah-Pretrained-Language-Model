@@ -1139,6 +1139,19 @@ def validate_flags_or_throw(bert_config):
 
 
 def main(_):
+    """    Main function for running training, predictions, and evaluations using
+    BERT model.
+
+    This function sets up the BERT model configuration, tokenizer, TPU
+    cluster resolver, and run configuration. It then processes the training
+    examples, converts them to features, and runs the training. It also
+    handles predictions and evaluations by processing the input examples,
+    converting them to features, and running predictions or evaluations.
+
+    Args:
+        _: Placeholder argument.
+    """
+
     tf.logging.set_verbosity(tf.logging.INFO)
 
     bert_config = modeling.BertConfig.from_json_file(FLAGS.bert_config_file)
