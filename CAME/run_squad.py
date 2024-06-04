@@ -724,6 +724,20 @@ class GradientClipper:
 
 
 def main():
+    """    Main function for running BERT Question Answering model.
+
+    This function parses the command line arguments, initializes the BERT
+    model and tokenizer, performs training and/or prediction, and evaluates
+    the model if specified.
+
+
+    Raises:
+        ValueError: If invalid parameters are provided.
+        ImportError: If required package (apex) is not installed.
+        FileNotFoundError: If the specified file is not found.
+        RuntimeError: If an error occurs during training or prediction.
+    """
+
     parser = argparse.ArgumentParser()
 
     ## Required parameters
