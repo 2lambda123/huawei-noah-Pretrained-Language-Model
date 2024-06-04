@@ -47,6 +47,17 @@ def soft_cross_entropy(predicts, targets):
     return (- targets_prob * student_likelihood).mean()
 
 def main():
+    """    Main function for training and evaluating a question answering model.
+
+    This function parses the command line arguments, sets up the model and
+    optimizer, performs training and evaluation, and saves the trained
+    model.
+
+
+    Raises:
+        FileNotFoundError: If the specified input or output directories do not exist.
+    """
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--data_dir",
                         default='data/',
