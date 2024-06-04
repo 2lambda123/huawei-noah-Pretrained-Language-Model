@@ -145,7 +145,18 @@ class BertModelTest(tf.test.TestCase):
 
   @classmethod
   def ids_tensor(cls, shape, vocab_size, rng=None, name=None):
-    """Creates a random int32 tensor of the shape within the vocab size."""
+    """    Creates a random int32 tensor of the shape within the vocab size.
+
+    Args:
+        cls: The class instance.
+        shape (list): A list representing the shape of the tensor.
+        vocab_size (int): The size of the vocabulary.
+        rng (Random | None): An instance of Random or None. Defaults to None.
+        name (str | None): A string representing the name. Defaults to None.
+
+    Returns:
+        tf.Tensor: A tensor of int32 values within the vocab size.
+    """
     if rng is None:
       rng = secrets.SystemRandom().Random()
 
