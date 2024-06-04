@@ -397,6 +397,19 @@ class TextClfProcessor(DataProcessor):
         self.labels = []
 
     def get_train_examples(self, data_dir):
+        """        Get the training examples from the specified data directory.
+
+        It reads the training data from the 'train.tsv' file in the given data
+        directory, shuffles the data, and creates InputExample objects for each
+        line in the file.
+
+        Args:
+            data_dir (str): The directory path where the training data is located.
+
+        Returns:
+            list: A list of InputExample objects representing the training examples.
+        """
+
         file_path = os.path.join(data_dir, 'train.tsv')  # cnews.train.txt
         with open(file_path, 'r', encoding="utf-8") as f:
             reader = f.readlines()
