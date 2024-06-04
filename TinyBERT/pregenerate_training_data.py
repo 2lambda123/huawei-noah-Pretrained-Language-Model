@@ -78,6 +78,28 @@ class DocumentDatabase:
         self.cumsum_max = self.doc_cumsum[-1]
 
     def sample_doc(self, current_idx, sentence_weighted=True):
+        """        Sample a document from the collection based on the current index and
+        sentence weighting.
+
+        This function samples a document from the collection based on the
+        current index and whether sentence weighting is enabled. If sentence
+        weighting is enabled, documents are sampled proportionally to their
+        sentence length. If not, each document has an equal chance of being
+        chosen.
+
+        Args:
+            self: The object instance.
+            current_idx (int): The current iteration counter to ensure a different document is sampled
+                each time.
+            sentence_weighted (bool?): Flag to enable sentence weighting for sampling. Defaults to True.
+
+        Returns:
+            str: The sampled document from the collection.
+
+        Raises:
+            AssertionError: If the sampled document index is the same as the current index.
+        """
+
         # Uses the current iteration counter to ensure we don't sample the same doc twice
         if sentence_weighted:
             # With sentence weighting, we sample docs proportionally to their sentence length
@@ -116,7 +138,22 @@ class DocumentDatabase:
 
 
 def truncate_seq_pair(tokens_a, tokens_b, max_num_tokens):
-    """Truncates a pair of sequences to a maximum sequence length. Lifted from Google's BERT repo."""
+    """    Truncates a pair of sequences to a maximum sequence length.
+
+    This function truncates a pair of sequences to a maximum sequence length
+    by removing tokens from the longer sequence until the total length of
+    both sequences is less than or equal to the specified maximum number of
+    tokens.
+
+    Args:
+        tokens_a (list): A list of tokens representing the first sequence.
+        tokens_b (list): A list of tokens representing the second sequence.
+        max_num_tokens (int): The maximum allowed total number of tokens for both sequences.
+
+
+    Raises:
+        AssertionError: If the length of the trunc_tokens is less than 1.
+    """
     while True:
         total_length = len(tokens_a) + len(tokens_b)
         if total_length <= max_num_tokens:
@@ -138,8 +175,25 @@ MaskedLmInstance = collections.namedtuple("MaskedLmInstance",
 
 
 def create_masked_lm_predictions(tokens, masked_lm_prob, max_predictions_per_seq, whole_word_mask, vocab_list):
-    """Creates the predictions for the masked LM objective. This is mostly copied from the Google BERT repo, but
-    with several refactors to clean it up and remove a lot of unnecessary variables."""
+    """    Creates the predictions for the masked LM objective.
+
+    This function takes a list of tokens, a probability for masking tokens,
+    a maximum number of predictions per sequence, a flag for whole word
+    masking, and a vocabulary list. It then generates predictions for the
+    masked LM objective.
+
+    Args:
+        tokens (list): A list of tokens.
+        masked_lm_prob (float): The probability for masking tokens.
+        max_predictions_per_seq (int): The maximum number of predictions per sequence.
+        whole_word_mask (bool): A flag for whole word masking.
+        vocab_list (list): A list of words in the vocabulary.
+
+    Returns:
+        tuple: A tuple containing: - list: The modified list of tokens with masked
+            tokens. - list: The indices of the masked tokens. - list: The original
+            labels of the masked tokens.
+    """
     cand_indices = []
     for (i, token) in enumerate(tokens):
         if token == "[CLS]" or token == "[SEP]":
@@ -204,10 +258,28 @@ def create_masked_lm_predictions(tokens, masked_lm_prob, max_predictions_per_seq
 def create_instances_from_document(
         doc_database, doc_idx, max_seq_length, short_seq_prob,
         masked_lm_prob, max_predictions_per_seq, whole_word_mask, vocab_list, bi_text=True):
-    """This code is mostly a duplicate of the equivalent function from Google BERT's repo.
-    However, we make some changes and improvements. Sampling is improved and no longer requires a loop in this function.
-    Also, documents are sampled proportionally to the number of sentences they contain, which means each sentence
-    (rather than each document) has an equal chance of being sampled as a false example for the NextSentence task."""
+    """    This code is mostly a duplicate of the equivalent function from Google
+    BERT's repo.
+    However, we make some changes and improvements. Sampling is improved and
+    no longer requires a loop in this function. Also, documents are sampled
+    proportionally to the number of sentences they contain, which means each
+    sentence (rather than each document) has an equal chance of being
+    sampled as a false example for the NextSentence task.
+
+    Args:
+        doc_database: The document database.
+        doc_idx: The index of the document.
+        max_seq_length: The maximum sequence length.
+        short_seq_prob: The probability of using shorter sequences.
+        masked_lm_prob: The probability of masked language model.
+        max_predictions_per_seq: The maximum number of predictions per sequence.
+        whole_word_mask: Whether to mask whole words.
+        vocab_list: The vocabulary list.
+        bi_text (bool?): Whether to use bi-text. Defaults to True.
+
+    Returns:
+        list: A list of instances.
+    """
     document = doc_database[doc_idx]
     # Account for [CLS], [SEP], [SEP]
     max_num_tokens = max_seq_length - 3
