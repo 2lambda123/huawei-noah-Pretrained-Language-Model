@@ -401,10 +401,23 @@ class DDenoisingPairDatasetDynaReplace(FairseqDataset):
         return is_word_start
 
     def replace_mono_word(self, src_item):
-        '''
-        :param source:
-        :return:  list
-        '''
+        """        Replace mono word in the source item and return the modified source
+        item, modified target item,
+        alignment indices, and padded source item.
+
+        Args:
+            self: The object instance.
+            src_item: The input source item.
+
+        Returns:
+            list: The modified source item.
+            list: The modified target item.
+            list: The alignment indices.
+            list: The padded source item.
+
+        Raises:
+            AssertionError: If the length of src_itemn is not equal to the length of src_item_pad.
+        """
         src_list = src_item.numpy().tolist()
         core_src = "-".join([str(x) for x in src_list])
         core_tgt = copy.deepcopy(core_src)
@@ -504,10 +517,21 @@ class DDenoisingPairDatasetDynaReplace(FairseqDataset):
         return bound_token + sent + bound_token
 
     def replace_para_word(self, src_item, tgt_item):
-        '''
-        :param source:
-        :return:  list
-        '''
+        """        Replace certain words in the source and target items and return the
+        modified source and target items along with a flag indicating the
+        replaced words.
+
+        Args:
+            src_item (Tensor): The source item.
+            tgt_item (Tensor): The target item.
+
+        Returns:
+            Tuple[Tensor, Tensor, List[int]]: A tuple containing the modified source item, modified target item, and a
+                list of flags indicating the replaced words.
+
+        Raises:
+            AssertionError: If the lengths of the raw and modified target items are not equal.
+        """
 
         src_list = src_item.numpy().tolist()
         tgt_list = tgt_item.numpy().tolist()
@@ -857,6 +881,22 @@ class DDenoisingPairDatasetDynaReplace(FairseqDataset):
         return can_mask_num, sub_mask_ratio
 
     def process_for_para(self, src_item, tgt_item):
+        """        Process the input source and target items for parallel corpus.
+
+        It processes the input source and target items for parallel corpus by
+        performing various operations such as swapping, adding language pairs,
+        appending end-of-sentence tokens, and masking.
+
+        Args:
+            self: The object instance.
+            src_item (torch.Tensor): The input source item.
+            tgt_item (torch.Tensor): The input target item.
+
+        Returns:
+            tuple: A tuple containing the masked target item, ignored target item, masked
+                source item, and ignored source item.
+        """
+
         is_swap = secrets.SystemRandom().random()
         self.add_langs = copy.deepcopy(self.add_langs_raw)
 
