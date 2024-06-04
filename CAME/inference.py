@@ -217,6 +217,16 @@ def get_answer(doc_tokens, tokens_for_postprocessing,
 
 
 def main():
+    """    Main function to perform question answering using BERT model.
+
+    This function takes various input parameters such as bert_model,
+    init_checkpoint, verbose_logging, seed, question, context,
+    max_seq_length, max_query_length, n_best_size, max_answer_length,
+    no_cuda, do_lower_case, version_2_with_negative,
+    null_score_diff_threshold, vocab_file, config_file, fp16, local_rank and
+    performs question answering using BERT model.
+    """
+
     parser = argparse.ArgumentParser()
     
     ## Required parameters
