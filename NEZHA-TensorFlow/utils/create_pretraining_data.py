@@ -407,6 +407,15 @@ def truncate_seq_pair(tokens_a, tokens_b, max_num_tokens, rng):
 
 
 def main(_):
+  """  Main function for processing input files and writing output files.
+
+  This function processes input files by reading from them, creating
+  training instances, and writing to output files.
+
+  Args:
+      _: Placeholder argument.
+  """
+
   tf.logging.set_verbosity(tf.logging.INFO)
 
   tokenizer = tokenization.FullTokenizer(
