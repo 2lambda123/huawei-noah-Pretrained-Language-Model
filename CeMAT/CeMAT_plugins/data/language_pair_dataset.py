@@ -9,7 +9,6 @@
 #
 
 import logging
-import random
 import copy
 import numpy as np
 import torch
@@ -17,6 +16,7 @@ from fairseq.data import FairseqDataset, data_utils, denoising_dataset
 import time
 import logging
 import math
+import secrets
 
 logger = logging.getLogger(__name__)
 
@@ -578,7 +578,7 @@ class LanguagePairDataset(FairseqDataset):
         src_item = self.src[index]
 
         prev_output_tokens = None
-        is_swap = random.random()
+        is_swap = secrets.SystemRandom().random()
         if self.lang_pair == None or self.lang_pair[0] != self.lang_pair[1]:
             if is_swap > 0.5 and self.shuffle_lang_pair:
                 src_item, tgt_item = tgt_item, src_item

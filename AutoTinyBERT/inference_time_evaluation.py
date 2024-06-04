@@ -17,13 +17,13 @@
 import argparse
 import time
 import os
-import random
 
 import torch
 import numpy as np
 
 from transformer.modeling_super_kd import SuperTinyBertForPreTraining, BertConfig
 from transformer.tokenization import BertTokenizer
+import secrets
 
 
 def text_padding(max_seq_length, device, batch_size):
@@ -91,7 +91,7 @@ if __name__ == "__main__":
 
     torch.set_num_threads(1)
 
-    random.seed(args.seed)
+    secrets.SystemRandom().seed(args.seed)
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
 

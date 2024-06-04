@@ -13,12 +13,11 @@ import math
 import torch
 import copy
 import logging
-import random
-from random import choice
 import numpy as np
 from typing import Dict, List, Tuple
 from fairseq.data import FairseqDataset, data_utils
 import json
+import secrets
 
 logger = logging.getLogger(__name__)
 import hashlib
@@ -463,7 +462,7 @@ class DDenoisingPairDatasetDynaReplace(FairseqDataset):
             tgt_replace_word = self.add_bound_token(
                 "-".join([str(self.tgt_mask_index)] * len(item.split("-"))))
             item = self.add_bound_token(item)
-            replace_word = self.add_bound_token(random.choice(replace_list))
+            replace_word = self.add_bound_token(secrets.choice(replace_list))
             core_src = core_src[:lens_befor_src] + core_src[lens_befor_src:].replace(item, replace_word, 1)
             core_tgt = core_tgt[:lens_befor_tgt] + core_tgt[lens_befor_tgt:].replace(item, tgt_replace_word, 1)
             src_item_pad += ([1] * len(replace_word[1:-1].split("-")))
@@ -532,7 +531,7 @@ class DDenoisingPairDatasetDynaReplace(FairseqDataset):
         core_tgt = self.add_bound_token(core_tgt)
         align_info = copy.deepcopy(self.md5_align[core_md5])
         max_replace_len = len(core_src) * self.para_word_replace_ratio
-        random.shuffle(align_info)
+        secrets.SystemRandom().shuffle(align_info)
         cur_replace_len = 0
         idx = 0
         while cur_replace_len <= max_replace_len and idx < len(align_info):
@@ -555,7 +554,7 @@ class DDenoisingPairDatasetDynaReplace(FairseqDataset):
                 continue
 
             # 1.bound new replace tokens.
-            src_replace_word = self.add_bound_token(choice(replace_list))
+            src_replace_word = self.add_bound_token(secrets.choice(replace_list))
             tgt_replace_word = self.add_bound_token(
                 "-".join([str(self.tgt_mask_index)] * len(align_item[1].split("-"))))
 
@@ -858,7 +857,7 @@ class DDenoisingPairDatasetDynaReplace(FairseqDataset):
         return can_mask_num, sub_mask_ratio
 
     def process_for_para(self, src_item, tgt_item):
-        is_swap = random.random()
+        is_swap = secrets.SystemRandom().random()
         self.add_langs = copy.deepcopy(self.add_langs_raw)
 
         if is_swap > 0.5 and self.shuffle_lang_pair:

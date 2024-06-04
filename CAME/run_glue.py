@@ -21,7 +21,6 @@ import pickle
 import argparse
 import logging
 import os
-import random
 import wget
 import json
 import time
@@ -44,6 +43,7 @@ from sklearn.metrics import matthews_corrcoef, f1_score
 from utils import (is_main_process, mkdir_by_main_process, format_step,
                    get_world_size)
 from processors.glue import PROCESSORS, convert_examples_to_features
+import secrets
 
 torch._C._jit_set_profiling_mode(False)
 torch._C._jit_set_profiling_executor(False)
@@ -502,7 +502,7 @@ def main(args):
     args.train_batch_size = (args.train_batch_size //
                              args.gradient_accumulation_steps)
 
-    random.seed(args.seed)
+    secrets.SystemRandom().seed(args.seed)
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
     if n_gpu > 0:

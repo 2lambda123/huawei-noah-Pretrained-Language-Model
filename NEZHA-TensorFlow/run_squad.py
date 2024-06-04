@@ -22,7 +22,6 @@ import collections
 import json
 import math
 import os
-import random
 import modeling
 import optimization
 import tokenization
@@ -30,6 +29,7 @@ import six
 import tensorflow as tf
 import numpy
 import pdb
+import secrets
 
 flags = tf.flags
 FLAGS = flags.FLAGS
@@ -1175,7 +1175,7 @@ def main(_):
 
         # Pre-shuffle the input to avoid having to make a very large shuffle
         # buffer in in the `input_fn`.
-        rng = random.Random(int(FLAGS.rand_seed))
+        rng = secrets.SystemRandom().Random(int(FLAGS.rand_seed))
         rng.shuffle(train_examples)
 
         # We write to a temporary file to avoid storing very large constant tensors

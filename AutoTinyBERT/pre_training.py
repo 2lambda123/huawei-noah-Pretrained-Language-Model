@@ -22,7 +22,6 @@ from argparse import ArgumentParser
 from pathlib import Path
 
 import json
-import random
 import numpy as np
 from collections import namedtuple
 import time
@@ -34,6 +33,7 @@ from tqdm import tqdm
 
 import pickle
 import collections
+import secrets
 
 # This is used for running on Huawei Cloud.
 oncloud = True
@@ -77,19 +77,19 @@ def create_masked_lm_predictions(tokens, masked_lm_prob, max_predictions_per_seq
 
     num_to_mask = min(max_predictions_per_seq,
                       max(1, int(round(len(tokens) * masked_lm_prob))))
-    mask_indices = sorted(random.sample(range(1, len(tokens)-1), num_to_mask))
+    mask_indices = sorted(secrets.SystemRandom().sample(range(1, len(tokens)-1), num_to_mask))
     masked_token_labels = [tokens[index] for index in mask_indices]
     for index in mask_indices:
         # 80% of the time, replace with [MASK]
-        if random.random() < 0.8:
+        if secrets.SystemRandom().random() < 0.8:
             masked_token = "[MASK]"
         else:
             # 10% of the time, keep original
-            if random.random() < 0.5:
+            if secrets.SystemRandom().random() < 0.5:
                 masked_token = tokens[index]
             # 10% of the time, replace with random word
             else:
-                masked_token = random.choice(vocab_list)
+                masked_token = secrets.choice(vocab_list)
         tokens[index] = masked_token
 
     return tokens, mask_indices, masked_token_labels
@@ -379,7 +379,7 @@ def main():
 
     args.train_batch_size = args.train_batch_size // args.gradient_accumulation_steps
 
-    random.seed(args.seed)
+    secrets.SystemRandom().seed(args.seed)
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
     torch.cuda.manual_seed_all(args.seed)

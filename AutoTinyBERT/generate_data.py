@@ -27,9 +27,9 @@ from tqdm import tqdm, trange
 from tempfile import TemporaryDirectory
 
 import numpy as np
-from random import randrange
 
 from transformer.tokenization import BertTokenizer
+import secrets
 
 # This is used for running on Huawei Cloud.
 oncloud = True
@@ -85,11 +85,11 @@ class DocumentDatabase:
                 self._precalculate_doc_weights()
             rand_start = self.doc_cumsum[current_idx]
             rand_end = rand_start + self.cumsum_max - self.doc_lengths[current_idx]
-            sentence_index = randrange(rand_start, rand_end) % self.cumsum_max
+            sentence_index = secrets.SystemRandom().randrange(rand_start, rand_end) % self.cumsum_max
             sampled_doc_index = np.searchsorted(self.doc_cumsum, sentence_index, side='right')
         else:
             # If we don't use sentence weighting, then every doc has an equal chance to be chosen
-            sampled_doc_index = (current_idx + randrange(1, len(self.doc_lengths))) % len(self.doc_lengths)
+            sampled_doc_index = (current_idx + secrets.SystemRandom().randrange(1, len(self.doc_lengths))) % len(self.doc_lengths)
         assert sampled_doc_index != current_idx
         if self.reduce_memory:
             return self.document_shelf[str(sampled_doc_index)]

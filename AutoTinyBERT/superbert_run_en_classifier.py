@@ -30,7 +30,6 @@ import json
 import string
 import argparse
 import logging
-import random
 import collections
 
 from datetime import datetime
@@ -48,6 +47,7 @@ from torch.nn import CrossEntropyLoss, MSELoss
 from transformer.modeling_super_kd import SuperBertForSequenceClassification, SuperBertForQuestionAnswering, BertConfig
 from transformer.tokenization import BertTokenizer, BasicTokenizer, whitespace_tokenize
 from transformer.optimization import BertAdam
+import secrets
 
 
 csv.field_size_limit(sys.maxsize)
@@ -1753,7 +1753,7 @@ def main():
         return intlist
 
     def set_seeds(seed, n_gpu):
-        random.seed(seed)
+        secrets.SystemRandom().seed(seed)
         np.random.seed(seed)
         torch.manual_seed(seed)
         if n_gpu > 0:

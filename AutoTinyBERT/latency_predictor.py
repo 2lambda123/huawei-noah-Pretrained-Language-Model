@@ -4,7 +4,6 @@
 # Paper: https://arxiv.org/abs/2005.14187
 # Project page: https://hanruiwang.me/project_pages/hat/
 
-import random
 import argparse
 import numpy as np
 import json
@@ -12,6 +11,7 @@ import json
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import secrets
 
 
 class Net(nn.Module):
@@ -69,7 +69,7 @@ class LatencyPredictor(object):
 
     def train(self):
         for i in range(self.train_steps):
-            sample_ind = random.sample(range(len(self.train_x)), k=self.bsz)
+            sample_ind = secrets.SystemRandom().sample(range(len(self.train_x)), k=self.bsz)
             sample_x = [self.train_x[sample_ind[k]] for k in range(self.bsz)]
             sample_y = [self.train_y[sample_ind[k]] for k in range(self.bsz)]
 
@@ -177,7 +177,7 @@ class LatencyPredictor(object):
                     print('Loaded {} structures!'.format(cnt))
 
         tmp = list(zip(features_norm_all, lats_all))
-        random.shuffle(tmp)
+        secrets.SystemRandom().shuffle(tmp)
         features_norm_all, lats_all = zip(*tmp)
         self.dataset = {'x': features_norm_all, 'y': lats_all}
 

@@ -26,7 +26,7 @@ import optimization
 import tokenization
 import tensorflow as tf
 import time
-import random
+import secrets
 
 flags = tf.flags
 
@@ -400,9 +400,9 @@ class TextClfProcessor(DataProcessor):
         file_path = os.path.join(data_dir, 'train.tsv')  # cnews.train.txt
         with open(file_path, 'r', encoding="utf-8") as f:
             reader = f.readlines()
-        random.seed(0)
+        secrets.SystemRandom().seed(0)
         # shuffle train data
-        random.shuffle(reader)
+        secrets.SystemRandom().shuffle(reader)
 
         examples = []
         for index, line in enumerate(reader):
