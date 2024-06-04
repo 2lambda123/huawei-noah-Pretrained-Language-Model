@@ -647,6 +647,20 @@ def do_eval(model, task_name, eval_dataloader,
 
 
 def main():
+    """    Main function for training and evaluating a TinyBERT model.
+
+    This function parses command line arguments, prepares the task settings,
+    devices, and seed, loads the teacher and student models, prepares the
+    optimizer and loss functions, trains and evaluates the student model,
+    and saves the best model based on evaluation results.
+
+
+    Raises:
+        ValueError: If the task is not found or if the output directory already exists and
+            is not empty.
+        RuntimeError: If the input list is empty.
+    """
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--data_dir",
                         default=None,

@@ -1570,6 +1570,18 @@ def do_qa_eval(args, model, dataloader, features, examples, device,
 
 
 def main():
+    """    Main function to train and evaluate a student model using the provided
+    arguments.
+
+    This function parses the input arguments, prepares the task settings,
+    fine-tunes the model, and evaluates the model's performance.
+
+
+    Raises:
+        ValueError: If the task is not found or if the output directory already exists and
+            is not empty.
+    """
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--data_dir",
                         default=None,
@@ -1753,6 +1765,16 @@ def main():
         return intlist
 
     def set_seeds(seed, n_gpu):
+        """        Set seeds for reproducibility.
+
+        This function sets the seeds for the random number generators in the
+        system to ensure reproducibility of results.
+
+        Args:
+            seed (int): The seed value for random number generation.
+            n_gpu (int): The number of GPUs available.
+        """
+
         secrets.SystemRandom().seed(seed)
         np.random.seed(seed)
         torch.manual_seed(seed)

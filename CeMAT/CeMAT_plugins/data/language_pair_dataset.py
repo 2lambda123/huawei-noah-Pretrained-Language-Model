@@ -574,6 +574,23 @@ class LanguagePairDataset(FairseqDataset):
         return torch.tensor(source), torch.tensor(target), torch.tensor(output)
 
     def __getitem__(self, index):
+        """        Retrieves an item from the dataset at the specified index.
+
+        This method retrieves an item from the dataset at the specified index.
+        It performs various operations such as swapping source and target items,
+        appending EOS to the target sentence, removing EOS from the source
+        sentence, and adding BOS to the target and source sentences.
+
+        Args:
+            index (int): The index of the item to retrieve.
+
+        Returns:
+            dict: A dictionary containing the retrieved item with the following keys: -
+                "id" (int): The index of the retrieved item. - "source" (torch.Tensor):
+                The source item. - "target" (torch.Tensor): The target item. -
+                "prev_output_tokens" (torch.Tensor): The previous output tokens.
+        """
+
         tgt_item = self.tgt[index] if self.tgt is not None else None
         src_item = self.src[index]
 
@@ -792,6 +809,18 @@ class LanguagePairDataset(FairseqDataset):
         return cands[prob]
 
     def mask_interval(self, l):
+        """        Calculate the start and length of a mask interval.
+
+        This function calculates the start and length of a mask interval based
+        on the input length and the ratio attribute of the object.
+
+        Args:
+            l (int): The length of the interval.
+
+        Returns:
+            tuple: A tuple containing the start index and length of the mask interval.
+        """
+
         mask_length = round(l * self.ratio)
         mask_length = max(1, mask_length)
         mask_start = self.mask_start(l - mask_length)

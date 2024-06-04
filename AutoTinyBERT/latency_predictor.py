@@ -68,6 +68,14 @@ class LatencyPredictor(object):
         self.bsz = bsz
 
     def train(self):
+        """        Train the model using the provided training data.
+
+        This function trains the model using the provided training data in a
+        loop for a specified number of steps. It performs forward and backward
+        passes, updates the model parameters, and prints validation and test
+        metrics.
+        """
+
         for i in range(self.train_steps):
             sample_ind = secrets.SystemRandom().sample(range(len(self.train_x)), k=self.bsz)
             sample_x = [self.train_x[sample_ind[k]] for k in range(self.bsz)]
@@ -144,6 +152,16 @@ class LatencyPredictor(object):
         self.test_y = self.dataset['y'][(train_num+valid_num):]
 
     def read_dataset(self):
+        """        Read and process the dataset from the specified file path.
+
+        This function reads the dataset from the specified file path, processes
+        the data, and stores it in a specific format.
+
+
+        Raises:
+            IOError: If the dataset file cannot be read.
+        """
+
         features_norm_all = []
         lats_all = []
         cnt = 0

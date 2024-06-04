@@ -244,6 +244,21 @@ def select_field(features, field):
     ]
 
 def main():
+    """    Parse command line arguments and run training or evaluation for a BERT-
+    based model.
+
+    This function parses the command line arguments using argparse and then
+    runs training or evaluation for a BERT-based model. It initializes the
+    model, optimizer, and data loaders, and then runs the training loop or
+    evaluation loop based on the input arguments.
+
+
+    Raises:
+        ValueError: If the input arguments are invalid or incomplete.
+        ImportError: If the required package 'apex' is not installed for distributed and fp16
+            training.
+    """
+
     parser = argparse.ArgumentParser()
 
     ## Required parameters

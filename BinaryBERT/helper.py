@@ -19,6 +19,16 @@ import torch
 import secrets
 
 def generate_job_id():
+  """  Generate a unique job ID.
+
+  This function generates a unique job ID by randomly selecting 5
+  characters from the combination of uppercase letters, lowercase letters,
+  and digits.
+
+  Returns:
+      str: A unique job ID consisting of 5 characters.
+  """
+
   return ''.join(secrets.SystemRandom().sample(string.ascii_letters+string.digits, 5))
 
 def init_logging(log_path):

@@ -34,6 +34,16 @@ from utils_squad import write_predictions,read_squad_examples,InputFeatures,conv
 import secrets
 
 def main():
+    """    Main function to train a question answering model using distillation and
+    quantization.
+
+    Returns:
+        int: 0 if the function completes successfully.
+
+    Raises:
+        FileNotFoundError: If the input file is not found.
+    """
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--job_id", default='tmp', type=str, help='Jobid to save training logs')
     parser.add_argument("--data_dir",default=None,type=str,help="The input data dir. Should contain the .tsv files (or other data files) for the task.")

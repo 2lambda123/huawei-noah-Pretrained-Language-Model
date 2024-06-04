@@ -429,6 +429,25 @@ def dump_predictions(path, label_map, preds, examples):
 
 
 def main(args):
+    """    Main function for training and evaluating a model.
+
+    This function handles the training and evaluation of a model using the
+    provided arguments. It initializes the device, sets up distributed
+    training if necessary, prepares the model and optimizer, and runs the
+    training and evaluation loops. It also logs the results and saves the
+    model if required.
+
+    Args:
+        args (argparse.Namespace): The parsed command-line arguments.
+
+    Returns:
+        dict: A dictionary containing the results of the training and evaluation
+            process.
+
+    Raises:
+        ValueError: If none of `do_train`, `do_eval`, or `do_predict` is set to True.
+    """
+
     args.fp16 = args.fp16 or args.amp
     if args.server_ip and args.server_port:
         # Distant debugging - see

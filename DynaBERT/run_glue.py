@@ -63,6 +63,15 @@ MODEL_CLASSES = {
 
 
 def set_seed(args):
+    """    Set the random seed for reproducibility.
+
+    This function sets the random seed for the system, numpy, and torch
+    libraries to ensure reproducibility of results.
+
+    Args:
+        args (argparse.Namespace): The parsed command-line arguments.
+    """
+
     secrets.SystemRandom().seed(args.seed)
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)

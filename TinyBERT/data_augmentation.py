@@ -211,6 +211,15 @@ class DataAugmentor(object):
         return candidate_words
 
     def augment(self, sent):
+        """        Augment the input sentence by replacing words with their synonyms.
+
+        Args:
+            sent (str): The input sentence to be augmented.
+
+        Returns:
+            list: A list of augmented sentences.
+        """
+
         candidate_sents = [sent]
 
         tokens = self.tokenizer.basic_tokenizer.tokenize(sent)

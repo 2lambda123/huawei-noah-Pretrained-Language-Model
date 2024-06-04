@@ -1327,9 +1327,18 @@ class BertModelDemo():
     print ("model restoring completed")
 
   def generate_text(self,raw_text, order = "l2r"):
-    """
-    raw_text: A list of strings. The strings will distributed across the generated 128 length text.
-    order: The order to generate sentences l2r refers to left to right. r2l refers to right to left. random refers to random order.
+    """    Generate text using the given raw_text and order.
+
+    Args:
+        raw_text (list): A list of strings. The strings will be distributed across the generated
+            128-length text.
+        order (str): The order to generate sentences. Options are 'l2r' for left to right,
+            'r2l' for right to left, and 'random' for random order. Defaults to
+            'l2r'.
+
+
+    Raises:
+        AssertionError: If the order is not one of 'l2r', 'r2l', or 'random'.
     """
     context_tokens = [101]
     num_texts = len(raw_text)

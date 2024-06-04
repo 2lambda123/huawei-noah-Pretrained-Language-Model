@@ -89,6 +89,14 @@ class WorkerInitObj(object):
     def __init__(self, seed):
         self.seed = seed
     def __call__(self, id):
+        """        Call the function with a given ID to seed the random number generator.
+
+        This function seeds the random number generator using the provided ID.
+
+        Args:
+            id (int): An integer ID used to seed the random number generator.
+        """
+
         np.random.seed(seed=self.seed + id)
         secrets.SystemRandom().seed(self.seed + id)
 
@@ -567,6 +575,17 @@ def take_optimizer_step(args, optimizer, model, overflow_buf, global_step):
     return global_step
 
 def main():
+    """    Main function for training a model.
+
+    This function performs the main training loop for a model. It sets up
+    the environment, prepares the optimizer, and trains the model. It also
+    handles logging and checkpointing.
+
+    Returns:
+        tuple: A tuple containing the arguments, final loss, training time, and global
+            step.
+    """
+
     global timeout_sent
 
     args = parse_arguments()

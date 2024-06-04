@@ -98,6 +98,19 @@ def soft_cross_entropy(predicts, targets):
     return (- targets_prob * student_likelihood).mean()
 
 def main():
+    """    Main function to train and evaluate a quantized BERT model for sequence
+    classification.
+
+    This function parses the command line arguments, prepares the data and
+    models, and runs the training and evaluation loops. It also handles the
+    quantization of the BERT model and saves the quantized model if
+    specified.
+
+
+    Raises:
+        AssertionError: If both 'pred_distill' and 'intermediate_distill' are False.
+    """
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--data_dir",
                         default='data',

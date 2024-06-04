@@ -87,6 +87,18 @@ class Evolver(object):
         self.search_space = search_space
 
     def generate_next_generation(self):
+        """        Generate the next generation of architectures based on the current
+        population.
+
+        This function generates the next generation of architectures by
+        selecting parent architectures based on their popularity, and then
+        either exploring new architectures with a certain probability or
+        mutating the selected parent architectures.
+
+        Returns:
+            list: A list of architectures representing the next generation.
+        """
+
         arch_lis = []
         arch_str_lis = []
         all_arches = self.all_arches
@@ -128,6 +140,26 @@ class Evolver(object):
         return arch_lis[:popularity]
 
     def mutation(self, arch):
+        """        Mutate the given architecture to create a new architecture with modified
+        parameters.
+
+        This function takes an architecture and mutates it to create a new
+        architecture with modified parameters. It uses a probabilistic approach
+        to randomly modify the architecture parameters based on the given
+        probability. The new architecture is then evaluated for latency and
+        compared against the latency scale to ensure it falls within the
+        specified range. If the new architecture is already present in the list
+        of all architectures, the mutation process is repeated until a unique
+        architecture is obtained.
+
+        Args:
+            self: The instance of the class.
+            arch (str): The architecture to be mutated in JSON format.
+
+        Returns:
+            dict: A new mutated architecture with modified parameters.
+        """
+
         args = self.args
         prob_m = self.prob_m
         latency_scale = self.latency_scale
@@ -217,10 +249,18 @@ class Evolver(object):
         return new_arch
 
     def roulette(self, arches, perfs):
-        '''
-        Input: a list of N fitness values (list or tuple)
-        Output: selected index
-        '''
+        """        Selects an index based on a list of fitness values.
+
+        This function takes a list of fitness values and selects an index based
+        on the fitness values using the roulette wheel selection method.
+
+        Args:
+            arches (list or tuple): A list of items to select from.
+            perfs (list or tuple): A list of fitness values corresponding to the items.
+
+        Returns:
+            int: The selected index.
+        """
         mini = min(perfs)
         new_fit = [perfs[i] - mini for i in range(len(perfs))]
         sum_fit = sum(new_fit)
