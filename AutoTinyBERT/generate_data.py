@@ -78,6 +78,27 @@ class DocumentDatabase:
         self.cumsum_max = self.doc_cumsum[-1]
 
     def sample_doc(self, current_idx, sentence_weighted=True):
+        """        Sample a document from the corpus based on the current index and
+        sentence weighting.
+
+        This function samples a document from the corpus based on the current
+        index and whether sentence weighting is enabled. If sentence weighting
+        is enabled, the sampling is proportional to the sentence length of the
+        documents.
+
+        Args:
+            self (obj): The object instance.
+            current_idx (int): The current iteration counter to ensure a different document is sampled
+                each time.
+            sentence_weighted (bool?): Flag to enable sentence weighting for sampling. Defaults to True.
+
+        Returns:
+            str: The sampled document from the corpus.
+
+        Raises:
+            AssertionError: If the sampled document index is the same as the current index.
+        """
+
         # Uses the current iteration counter to ensure we don't sample the same doc twice
         if sentence_weighted:
             # With sentence weighting, we sample docs proportionally to their sentence length
